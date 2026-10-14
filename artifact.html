@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR استودیو حمیدرضا</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Vazirmatn', 'Tahoma', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Vazirmatn Font -->
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- QRCode.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen font-sans flex flex-col items-center justify-between p-4 md:p-8">
+
+    <!-- Header -->
+    <header class="w-full max-w-4xl text-center mb-6">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-indigo-400 mb-2">
+            <i class="fa-solid fa-qrcode ml-2"></i> QR استودیو حمیدرضا
+        </h1>
+        <p class="text-slate-400 text-sm md:text-base">تولیدکننده حرفه‌ای، سریع و امن کدهای QR</p>
+    </header>
+
+    <!-- Warning Banner -->
+    <div class="w-full max-w-4xl bg-amber-500/10 border border-amber-500/30 text-amber-300 px-4 py-3 rounded-xl mb-6 text-sm flex items-center gap-3">
+        <i class="fa-solid fa-triangle-exclamation text-xl shrink-0"></i>
+        <span><strong>توصیه حیاتی:</strong> پیش از چاپ یا انتشار گسترده، حتماً کد تولید شده را با دوربین چند گوشی مختلف اسکن کنید.</span>
+    </div>
+
+    <!-- Main Container -->
+    <main class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-800/60 backdrop-blur border border-slate-700/60 p-6 rounded-2xl shadow-2xl">
+        
+        <!-- Controls Section -->
+        <div class="flex flex-col gap-4">
+            <h2 class="text-xl font-bold text-slate-200 border-b border-slate-700 pb-2">تنظیمات محتوا</h2>
+
+            <!-- Type Selector Tabs -->
+            <div class="grid grid-cols-3 gap-2 bg-slate-900/60 p-1.5 rounded-xl">
+                <button onclick="switchTab('text')" id="tab-text" class="tab-btn py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white transition">متن / لینک</button>
+                <button onclick="switchTab('phone')" id="tab-phone" class="tab-btn py-2 text-sm font-medium rounded-lg text-slate-400 hover:text-white transition">تلفن</button>
+                <button onclick="switchTab('wifi')" id="tab-wifi" class="tab-btn py-2 text-sm font-medium rounded-lg text-slate-400 hover:text-white transition">وای‌فای</button>
+            </div>
+
+            <!-- Input Fields: Text/URL -->
+            <div id="section-text" class="input-section flex flex-col gap-2">
+                <label class="text-sm text-slate-300">متن یا آدرس اینترنتی (URL)</label>
+                <input type="text" id="input-text" placeholder="https://example.com" class="bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500">
+            </div>
+
+            <!-- Input Fields: Phone -->
+            <div id="section-phone" class="input-section flex flex-col gap-2 hidden">
+                <label class="text-sm text-slate-300">شماره تلفن</label>
+                <input type="tel" id="input-phone" placeholder="09123456789" class="bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500">
+            </div>
+
+            <!-- Input Fields: WiFi -->
+            <div id="section-wifi" class="input-section flex flex-col gap-3 hidden">
+                <div class="flex flex-col gap-1">
+                    <label class="text-sm text-slate-300">نام شبکه (SSID)</label>
+                    <input type="text" id="wifi-ssid" placeholder="Home_Network" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-indigo-500 text-sm">
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-sm text-slate-300">رمز عبور</label>
+                    <input type="text" id="wifi-pass" placeholder="Password123" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-indigo-500 text-sm">
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-sm text-slate-300">نوع امنیت</label>
+                    <select id="wifi-type" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-indigo-500 text-sm">
+                        <option value="WPA">WPA/WPA2</option>
+                        <option value="WEP">WEP</option>
+                        <option value="nopass">بدون رمز (Open)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Customization Options -->
+            <div class="grid grid-cols-2 gap-4 mt-2">
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs text-slate-400">رنگ کد QR</label>
+                    <input type="color" id="qr-color" value="#000000" class="w-full h-10 bg-slate-900 border border-slate-700 rounded-xl cursor-pointer p-1">
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs text-slate-400">رنگ پس‌زمینه</label>
+                    <input type="color" id="qr-bg" value="#ffffff" class="w-full h-10 bg-slate-900 border border-slate-700 rounded-xl cursor-pointer p-1">
+                </div>
+            </div>
+
+            <!-- Generate Button -->
+            <button onclick="generateQRCode()" class="mt-4 w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl shadow-lg transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> ساخت کد QR
+            </button>
+        </div>
+
+        <!-- Output Section -->
+        <div class="flex flex-col items-center justify-center bg-slate-900/40 border border-slate-700/40 p-6 rounded-xl">
+            <div id="qrcode-container" class="p-4 bg-white rounded-2xl shadow-inner flex items-center justify-center min-h-[220px] min-w-[220px]">
+                <div id="qrcode" class="flex items-center justify-center"></div>
+            </div>
+            
+            <p id="status-text" class="text-slate-400 text-sm mt-4 text-center">کد QR شما اینجا نمایش داده می‌شود</p>
+
+            <!-- Download Button -->
+            <button id="download-btn" onclick="downloadQRCode()" class="mt-4 hidden w-full max-w-xs bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2.5 rounded-xl shadow transition items-center justify-center gap-2">
+                <i class="fa-solid fa-download"></i> دانلود تصویر QR
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full max-w-4xl text-center text-slate-500 text-xs mt-6">
+        طراحی‌شده برای امیرعلی / حمیدرضا &copy; 2026
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        let currentTab = 'text';
+        let qrInstance = null;
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-600', 'text-white');
+                btn.classList.add('text-slate-400');
+            });
+            document.getElementById(`tab-${tab}`).classList.add('bg-indigo-600', 'text-white');
+            document.getElementById(`tab-${tab}`).classList.remove('text-slate-400');
+
+            document.querySelectorAll('.input-section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(`section-${tab}`).classList.remove('hidden');
+        }
+
+        function generateQRCode() {
+            let data = "";
+
+            if (currentTab === 'text') {
+                data = document.getElementById('input-text').value.trim();
+            } else if (currentTab === 'phone') {
+                let phone = document.getElementById('input-phone').value.trim();
+                if (phone) data = `tel:${phone}`;
+            } else if (currentTab === 'wifi') {
+                let ssid = document.getElementById('wifi-ssid').value.trim();
+                let pass = document.getElementById('wifi-pass').value.trim();
+                let type = document.getElementById('wifi-type').value;
+                if (ssid) {
+                    data = `WIFI:S:${ssid};T:${type};P:${pass};;`;
+                }
+            }
+
+            if (!data) {
+                alert('لطفاً اطلاعات معتبری برای ساخت کد QR وارد کنید.');
+                return;
+            }
+
+            const colorDark = document.getElementById('qr-color').value;
+            const colorLight = document.getElementById('qr-bg').value;
+
+            // Clear previous QR
+            const qrElement = document.getElementById('qrcode');
+            qrElement.innerHTML = "";
+
+            try {
+                qrInstance = new QRCode(qrElement, {
+                    text: data,
+                    width: 200,
+                    height: 200,
+                    colorDark: colorDark,
+                    colorLight: colorLight,
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+
+                document.getElementById('status-text').innerText = "کد QR با موفقیت ساخته شد!";
+                document.getElementById('download-btn').classList.remove('hidden');
+                document.getElementById('download-btn').classList.add('flex');
+            } catch (error) {
+                console.error(error);
+                alert('خطا در تولید کد QR رخ داد.');
+            }
+        }
+
+        function downloadQRCode() {
+            const img = document.querySelector('#qrcode img') || document.querySelector('#qrcode canvas');
+            if (!img) {
+                alert('ابتدا کد QR را بسازید.');
+                return;
+            }
+
+            let imageUrl = "";
+            if (img.tagName === 'CANVAS') {
+                imageUrl = img.toDataURL("image/png");
+            } else if (img.tagName === 'IMG') {
+                imageUrl = img.src;
+            }
+
+            if (imageUrl) {
+                const link = document.createElement('a');
+                link.href = imageUrl;
+                link.download = 'qr-code-hamidreza.png';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+
+        // Generate default empty QR or sample on load
+        window.onload = function() {
+            document.getElementById('input-text').value = "https://example.com";
+            generateQRCode();
+        };
+    </script>
+</body>
+</html>
